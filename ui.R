@@ -33,12 +33,12 @@ shinyUI(fluidPage(
             value = 5,
             step = 1
         ),
-        submitButton("Predict")
+        actionButton("goButton", "Predict")
     ),
 
     # Show a table with text predictions
     mainPanel(
-      tableOutput("predTable")
+      DT::dataTableOutput("predTable")
     )
   )
 ))
