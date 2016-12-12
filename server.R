@@ -9,7 +9,7 @@ library(shiny)
 
 shinyServer(function(input, output) {
 
-  output$distPlot <- renderPlot({
+  output$predTable <- renderDataTable({
 
     # generate bins based on input$bins from ui.R
     x    <- faithful[, 2]
