@@ -15,16 +15,30 @@ shinyUI(fluidPage(
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 30)
+        textInput("query", "Enter phrase:"),
+        radioButtons(
+            "corp",
+            "Choose prediction source:",
+            c("Blogs" = "blogs",
+              "News" = "news",
+              "Twitter" = "tweets",
+              "Microsoft" = "web")
+        ),
+        checkboxInput("keep_stop", "Include stop words"),
+        sliderInput(
+            "return_n",
+            "Number of words to return:",
+            min = 1,
+            max = 25,
+            value = 5,
+            step = 1
+        ),
+        submitButton("Predict")
     ),
 
-    # Show a plot of the generated distribution
+    # Show a table with text predictions
     mainPanel(
-      plotOutput("distPlot")
+      tableOutput("predTable")
     )
   )
 ))
