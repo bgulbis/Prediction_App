@@ -38,7 +38,26 @@ shinyUI(fluidPage(
 
     # Show a table with text predictions
     mainPanel(
-      DT::dataTableOutput("predTable")
+        tabsetPanel(
+            tabPanel("Prediction",
+                     DT::dataTableOutput("predTable")
+            ),
+            tabPanel("Help",
+                     h4("How to use this app"),
+                     p("Enter a phrase or sentence in text box. Use the radio
+                       buttons to select the data source for the predictions.
+                       You can choose from the blogs, news, or Twitter data sets
+                       which come from the HC Corpora. Alternatively, select
+                       Microsoft to use the Microsoft Web Language Model. If you
+                       would like common stop words included in the results
+                       (such as: the, and, to, of, etc.), check the Include stop
+                       words box (note, this does not apply to predictions use
+                       the Microsoft Web Language Model). Use the slider to
+                       select the number of predictions to return. Once you have
+                       selected all of your desired options, click on the
+                       Predict button to get your predictions!")
+            )
+        )
     )
   )
 ))
