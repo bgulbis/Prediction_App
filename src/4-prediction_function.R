@@ -58,11 +58,11 @@ predict_words <- function(phrase, return_n = 5, keep_stop = FALSE) {
     qbo_unobs_tri <- unobs_trigram[qbo_bigram, nomatch = 0
                                    ][, .(word1, word2, word3, qbo = alpha3 * (qbo2 / sum(qbo2)))]
     qbo_trig <- rbind(qbo_obs_tri, qbo_unobs_tri)[order(-qbo)]
-    setnames(qbo_trig, "qbo", "probability")
+    prediction <- qbo_trig[, .(word = word3, probability = qbo)]
 
     if (keep_stop == FALSE) {
-        qbo_trig[!(word3 %in% quanteda::stopwords("english"))][1:return_n]
+        prediction[!(word %in% quanteda::stopwords("english"))][1:return_n]
     } else {
-        qbo_trig[1:return_n]
+        prediction[1:return_n]
     }
 }
