@@ -53,7 +53,7 @@ shinyUI(fluidPage(
                        the Microsoft Web Language Model). Use the slider to
                        select the number of predictions to return. Once you have
                        selected all of your desired options, click on Predict
-                       button to get your predictions!")
+                       button to get your predictions! The results are ordered from the most likely word to the least likely.")
             )
         )
     )
