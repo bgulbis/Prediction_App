@@ -26,5 +26,11 @@ web_lookup <- function(x, return_n) {
                            words = words,
                            maxNumOfCandidatesReturned = return_n))
 
-    fromJSON(content(r, "text"))$candidates
+    ans <- fromJSON(content(r, "text"))$candidates
+
+    if (length(ans) == 0) {
+        data.frame(word = "Unable to find a prediction", probability = 0)
+    } else {
+        ans
+    }
 }
