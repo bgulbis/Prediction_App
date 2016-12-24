@@ -19,9 +19,7 @@ shinyUI(fluidPage(
         radioButtons(
             "corp",
             "Choose prediction source:",
-            c("Blogs" = "blogs",
-              "News" = "news",
-              "Twitter" = "tweets",
+            c("HC Corpora" = "hc",
               "Microsoft" = "web")
         ),
         checkboxInput("keep_stop", "Include stop words"),
@@ -46,16 +44,16 @@ shinyUI(fluidPage(
                      h4("How to use this app"),
                      p("Enter a phrase or sentence in text box. Use the radio
                        buttons to select the data source for the predictions.
-                       You can choose from the blogs, news, or Twitter data sets
-                       which come from the HC Corpora. Alternatively, select
+                       You can use the HC Corpora which contains tokesn from a
+                       variety of blogs, news, and Twitter data, or select
                        Microsoft to use the Microsoft Web Language Model. If you
                        would like common stop words included in the results
                        (such as: the, and, to, of, etc.), check the Include stop
                        words box (note, this does not apply to predictions use
                        the Microsoft Web Language Model). Use the slider to
                        select the number of predictions to return. Once you have
-                       selected all of your desired options, click on the
-                       Predict button to get your predictions!")
+                       selected all of your desired options, click on Predict
+                       button to get your predictions!")
             )
         )
     )

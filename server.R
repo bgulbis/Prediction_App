@@ -6,93 +6,8 @@
 #
 
 library(shiny)
-
-#' Predict the next word
-#'
-#' @param x a character vector, expected to be a sentence
-#' @param corp a character indicating which source to use; valid options are:
-#'   blogs, news, tweets
-#' @param return_n a numeric indicating the number of word predictions to return
-#' @param keep_stop a logical indicating whether stop words should be included
-#'   in results; defaults to FALSE (no stop words)
-#'
-#' @return a data.table, contains predicted words and calculated probability
-predict_text_feather <- function(x, corp = "blogs", return_n = 5, keep_stop = FALSE) {
-    require(tidyverse)
-    require(stringr)
-    require(data.table)
-    require(feather)
-    # words <- words_compare(x)
-
-    words <- str_to_lower(x) %>%
-        word(-2, -1) %>%
-        str_split(" ") %>%
-        unlist()
-
-    print(c("Searching by: ", words))
-
-    # prob <- list.files("data/final", paste0("^pred(.*)", corp), full.names = TRUE) %>%
-    #     map(read_rds) %>%
-    #     map(as.data.table)
-
-    # prob <- read_rds(paste0("data/final/pred_3gram_", corp, ".Rds")) %>%
-    prob <- read_feather(paste0("data/final/pred_3gram_", corp, ".feather")) %>%
-        as.data.table()
-
-    pred <- prob[word1 == words[1] & word2 == words[2], .(word = word3, prob = round(discount * mle3, 4))][order(-prob)]
-
-    if (nrow(pred) == 0) {
-        print("There were no matching trigrams, searching bigrams")
-        # prob <- read_rds(paste0("data/final/pred_2gram_", corp, ".Rds")) %>%
-        prob <- read_feather(paste0("data/final/pred_2gram_", corp, ".feather")) %>%
-            as.data.table()
-        pred <- prob[word1 == words[2], .(word = word2, prob = round((remain / sum(discount * mle2)) * (discount * mle2), 4))][order(-prob)]
-
-        if (nrow(pred) == 0) {
-            print("There were no matching bigrams, searching unigrams")
-            # prob <- read_rds(paste0("data/final/pred_1gram_", corp, ".Rds")) %>%
-            prob <- read_feather(paste0("data/final/pred_1gram_", corp, ".feather")) %>%
-                as.data.table()
-            pred <- prob[, .(word = word1, prob = round((remain / sum(discount * mle1)) * (discount * mle1), 4))][order(-prob)]
-        }
-    }
-
-    if (keep_stop == FALSE) {
-        pred[!(word %in% quanteda::stopwords("english"))][1:return_n]
-    } else {
-        pred[1:return_n]
-    }
-}
-
-web_lookup <- function(x, return_n) {
-    require(httr)
-    require(jsonlite)
-    require(stringr)
-
-    # Ocp-Apim-Subscription-Key
-    api <- "39b702f50fd04d1f9730243bbbd6e0e8"
-    names(api) <- "Ocp-Apim-Subscription-Key"
-
-    url <- "https://api.projectoxford.ai/text/weblm/v1.0/generateNextWords"
-
-    # model: body
-    # words
-    # order: 1-5, optional
-    # maxNumOfCandidatesReturned, default = 5; optional
-
-    n <- 5
-    words <- str_to_lower(x)
-    words <- word(words, (-1 * (n - 1)), -1)
-
-    r <- POST(url,
-              add_headers(api),
-              query = list(model = "body",
-                           order = n,
-                           words = words,
-                           maxNumOfCandidatesReturned = return_n))
-
-    fromJSON(content(r, "text"))$candidates
-}
+source("src/4-prediction_function.R")
+source("src/5-microsoft.R")
 
 shinyServer(function(input, output) {
 
@@ -112,7 +27,7 @@ shinyServer(function(input, output) {
         if (corp == "web") {
             web_lookup(query, return_n)
         } else {
-            predict_text_feather(query, corp, return_n, keep_stop)
+            predict_words(query, return_n, keep_stop)
         }
     })
 
