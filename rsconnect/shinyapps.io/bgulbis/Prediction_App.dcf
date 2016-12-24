@@ -3,9 +3,8 @@ title: Prediction_App
 account: bgulbis
 server: shinyapps.io
 appId: 145962
-bundleId: 653576
+bundleId: 659857
 url: https://bgulbis.shinyapps.io/Prediction_App/
-when: 1482006032.87049
+when: 1482551207.29886
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: data/final/pred_1gram_blogs.Rds|data/final/pred_1gram_news.Rds|data/final/pred_1gram_tweets.Rds|data/final/pred_2gram_blogs.Rds|data/final/pred_2gram_news.Rds|data/final/pred_2gram_tweets.Rds|data/final/pred_3gram_blogs.Rds|data/final/pred_3gram_news.Rds|data/final/pred_3gram_tweets.Rds
